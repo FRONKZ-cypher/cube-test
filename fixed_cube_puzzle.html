@@ -1,9 +1,14 @@
+To remove the "3x3x3 Cube" text from the HTML code, you need to modify the `<title>` tag within the `<head>` section and the `<h1>` tag within the `<div class="header">` section.
+
+Here's the updated code:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3×3×3 Cube Assembly Test</title>
+    <title>Cube Assembly Test</title>
     <style>
         * {
             margin: 0;
@@ -154,8 +159,8 @@
             transform: translateY(-5px);
         }
         .choice-option.disabled {
-             opacity: 0.7;
-             pointer-events: none;
+            opacity: 0.7;
+            pointer-events: none;
         }
 
         .choice-option.selected {
@@ -356,7 +361,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🧩 3×3×3 Cube Assembly Test</h1>
+        <h1>🧩 Cube Assembly Test</h1>
         <p>Find the missing piece to complete the 3×3×3 cube from the given partial shapes</p>
     </div>
 
@@ -677,9 +682,9 @@
             document.getElementById('operator2').style.display = 'block';
             
             stats.gamesPlayed++;
-            updateStatsDisplay(); 
-            startGameTimer(); 
-            generateQuestion(); 
+            updateStatsDisplay();
+            startGameTimer();
+            generateQuestion();
         }
 
         function generateQuestion() {
@@ -800,3 +805,4 @@
     </script>
 </body>
 </html>
+```
