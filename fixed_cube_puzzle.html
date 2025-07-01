@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3×3×3 Cube Assembly Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .problem-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .given-pieces {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .piece-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .piece-3d {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            /* Static transform will be set randomly by JavaScript */
+        }
+
+        .unit-cube {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            transform-style: preserve-3d;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .blue-cube .cube-face.front { 
+            background: #3498db;
+            transform: translateZ(10px); 
+        }
+        .blue-cube .cube-face.back { 
+            background: #2980b9;
+            transform: rotateY(180deg) translateZ(10px); 
+        }
+        .blue-cube .cube-face.right { 
+            background: #5dade2;
+            transform: rotateY(90deg) translateZ(10px); 
+        }
+        .blue-cube .cube-face.left { 
+            background: #2471a3;
+            transform: rotateY(-90deg) translateZ(10px); 
+        }
+        .blue-cube .cube-face.top { 
+            background: #85c1e9;
+            transform: rotateX(90deg) translateZ(10px); 
+        }
+        .blue-cube .cube-face.bottom { 
+            background: #1b4f72;
+            transform: rotateX(-90deg) translateZ(10px); 
+        }
+
+        .gray-cube .cube-face.front { 
+            background: #7f8c8d;
+            transform: translateZ(10px); 
+        }
+        .gray-cube .cube-face.back { 
+            background: #5d6d6e;
+            transform: rotateY(180deg) translateZ(10px); 
+        }
+        .gray-cube .cube-face.right { 
+            background: #95a5a6;
+            transform: rotateY(90deg) translateZ(10px); 
+        }
+        .gray-cube .cube-face.left { 
+            background: #566573;
+            transform: rotateY(-90deg) translateZ(10px); 
+        }
+        .gray-cube .cube-face.top { 
+            background: #aab7b8;
+            transform: rotateX(90deg) translateZ(10px); 
+        }
+        .gray-cube .cube-face.bottom { 
+            background: #34495e;
+            transform: rotateX(-90deg) translateZ(10px); 
+        }
+
+        .operator {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .choices-section {
+            margin-top: 40px;
+        }
+
+        .choices-title {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .choice-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .choice-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .choice-option.selected {
+            background: rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.6);
+        }
+
+        .choice-option.correct {
+            background: rgba(46, 204, 113, 0.4);
+            border-color: #27ae60;
+            animation: correctPulse 0.6s ease-in-out;
+        }
+
+        .choice-option.incorrect {
+            background: rgba(231, 76, 60, 0.4);
+            border-color: #c0392b;
+            animation: incorrectShake 0.6s ease-in-out;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .choice-label {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .choice-shape {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            perspective: 800px;
+        }
+
+        .choice-3d {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            /* Static transform will be set randomly by JavaScript */
+        }
+
+        .choice-3d .unit-cube {
+            width: 16px;
+            height: 16px;
+        }
+
+        .choice-3d .cube-face {
+            width: 16px;
+            height: 16px;
+        }
+
+        .choice-3d .blue-cube .cube-face.front { transform: translateZ(8px); }
+        .choice-3d .blue-cube .cube-face.back { transform: rotateY(180deg) translateZ(8px); }
+        .choice-3d .blue-cube .cube-face.right { transform: rotateY(90deg) translateZ(8px); }
+        .choice-3d .blue-cube .cube-face.left { transform: rotateY(-90deg) translateZ(8px); }
+        .choice-3d .blue-cube .cube-face.top { transform: rotateX(90deg) translateZ(8px); }
+        .choice-3d .blue-cube .cube-face.bottom { transform: rotateX(-90deg) translateZ(8px); }
+
+        .choice-3d .gray-cube .cube-face.front { transform: translateZ(8px); }
+        .choice-3d .gray-cube .cube-face.back { transform: rotateY(180deg) translateZ(8px); }
+        .choice-3d .gray-cube .cube-face.right { transform: rotateY(90deg) translateZ(8px); }
+        .choice-3d .gray-cube .cube-face.left { transform: rotateY(-90deg) translateZ(8px); }
+        .choice-3d .gray-cube .cube-face.top { transform: rotateX(90deg) translateZ(8px); }
+        .choice-3d .gray-cube .cube-face.bottom { transform: rotateX(-90deg) translateZ(8px); }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .score {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .given-pieces {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .piece-container {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .choices-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .choice-option {
+                height: 180px;
+            }
+            
+            .choice-shape {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧩 3×3×3 Cube Assembly Test</h1>
+        <p>Find the missing piece to complete the 3×3×3 cube from the given partial shapes</p>
+    </div>
+
+    <div class="test-container">
+        <div class="problem-section">
+            <h2 style="margin-bottom: 20px;">Given pieces:</h2>
+            <div class="given-pieces">
+                <div class="piece-container">
+                    <div class="piece-3d" id="piece1">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="operator">+</div>
+                
+                <div class="piece-container">
+                    <div class="piece-3d" id="piece2">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="operator">+ ? = 3×3×3 Cube</div>
+            </div>
+        </div>
+
+        <div class="choices-section">
+            <div class="choices-title">Select the correct missing part:</div>
+            <div class="choices-grid" id="choicesGrid">
+                <!-- Choices will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn" id="checkBtn" onclick="checkAnswer()" disabled>Check Answer</button>
+            <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+            <button class="btn" onclick="newQuestion()">New Question</button>
+        </div>
+
+        <div class="result" id="result"></div>
+        <div class="score" id="score">Score: 0/0</div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 0;
+        let selectedChoice = null;
+        let correctAnswer = null;
+        let currentPuzzle = null;
+
+        // Define the 3x3x3 cube as a complete set of coordinates
+        const fullCube = [];
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                for (let z = 0; z < 3; z++) {
+                    fullCube.push([x, y, z]);
+                }
+            }
+        }
+
+        // Predefined puzzle configurations
+        const puzzleConfigs = [
+            {
+                piece1: [
+                    [0,0,0], [1,0,0], [2,0,0], [0,1,0], [1,1,0], [2,1,0],
+                    [0,0,1], [1,0,1], [0,1,1], [1,1,1]
+                ],
+                piece2: [
+                    [2,0,1], [0,2,0], [1,2,0], [2,2,0], [0,0,2], [1,0,2]
+                ]
+            },
+            {
+                piece1: [
+                    [0,0,0], [1,0,0], [0,1,0], [0,2,0], [1,1,0], [1,2,0],
+                    [0,0,1], [1,0,1], [0,1,1]
+                ],
+                piece2: [
+                    [2,0,0], [2,1,0], [2,2,0], [1,1,1], [2,0,1], [2,1,1]
+                ]
+            },
+            {
+                piece1: [
+                    [0,0,0], [1,0,0], [2,0,0], [0,1,0], [0,2,0],
+                    [1,0,1], [2,0,1], [0,0,2]
+                ],
+                piece2: [
+                    [1,1,0], [2,1,0], [1,2,0], [2,2,0], [0,1,1], [1,1,1]
+                ]
+            }
+        ];
+
+        function createUnitCube(x, y, z, color = 'blue', scale = 1) {
+            const cube = document.createElement('div');
+            cube.className = `unit-cube ${color}-cube`;
+            
+            // Center the cube and apply scale
+            const centerOffset = -1;
+            cube.style.transform = `translate3d(${(x + centerOffset) * 20 * scale}px, ${(y + centerOffset) * 20 * scale}px, ${(z + centerOffset) * 20 * scale}px)`;
+            
+            const faces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+            faces.forEach(face => {
+                const faceDiv = document.createElement('div');
+                faceDiv.className = `cube-face ${face}`;
+                cube.appendChild(faceDiv);
+            });
+            
+            return cube;
+        }
+
+        function createPiece(coordinates, containerId, color = 'blue', scale = 1) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            coordinates.forEach(([x, y, z]) => {
+                const cube = createUnitCube(x, y, z, color, scale);
+                container.appendChild(cube);
+            });
+        }
+
+        function getMissingPiece(piece1, piece2) {
+            const occupied = new Set();
+            
+            // Add all coordinates from piece1 and piece2
+            [...piece1, ...piece2].forEach(([x, y, z]) => {
+                occupied.add(`${x},${y},${z}`);
+            });
+            
+            // Find missing coordinates
+            const missing = [];
+            fullCube.forEach(([x, y, z]) => {
+                if (!occupied.has(`${x},${y},${z}`)) {
+                    missing.push([x, y, z]);
+                }
+            });
+            
+            return missing;
+        }
+
+        function generateRandomVariations(originalPiece, count) {
+            const variations = [originalPiece];
+            
+            // Generate some random variations by moving/rotating pieces
+            for (let i = 1; i < count; i++) {
+                const variation = [];
+                const baseSize = Math.max(3, Math.min(8, originalPiece.length + Math.floor(Math.random() * 4) - 2));
+                
+                // Create random piece of similar size
+                const usedCoords = new Set();
+                let attempts = 0;
+                
+                while (variation.length < baseSize && attempts < 50) {
+                    const x = Math.floor(Math.random() * 3);
+                    const y = Math.floor(Math.random() * 3);
+                    const z = Math.floor(Math.random() * 3);
+                    const coord = `${x},${y},${z}`;
+                    
+                    if (!usedCoords.has(coord)) {
+                        usedCoords.add(coord);
+                        variation.push([x, y, z]);
+                    }
+                    attempts++;
+                }
+                
+                variations.push(variation);
+            }
+            
+            return variations;
+        }
+
+        function setRandomStaticRotation(element) {
+            // Generate random rotation angles for static display
+            const rotX = -60 + Math.random() * 120; // -60 to 60 degrees
+            const rotY = Math.random() * 360; // 0 to 360 degrees  
+            const rotZ = -45 + Math.random() * 90; // -45 to 45 degrees
+            
+            element.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
+        }
+
+        function generateQuestion() {
+            // Reset UI
+            document.getElementById('result').textContent = '';
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            selectedChoice = null;
+
+            // Select a random puzzle configuration
+            currentPuzzle = puzzleConfigs[Math.floor(Math.random() * puzzleConfigs.length)];
+            
+            // Create the two given pieces with random orientations
+            createPiece(currentPuzzle.piece1, 'piece1', 'blue');
+            createPiece(currentPuzzle.piece2, 'piece2', 'gray');
+            
+            // Set random static rotations for the problem pieces
+            setRandomStaticRotation(document.getElementById('piece1'));
+            setRandomStaticRotation(document.getElementById('piece2'));
+            
+            // Calculate the correct missing piece
+            const correctMissingPiece = getMissingPiece(currentPuzzle.piece1, currentPuzzle.piece2);
+            
+            // Generate choice variations
+            const choices = generateRandomVariations(correctMissingPiece, 4);
+            correctAnswer = 0; // The correct answer is always the first one initially
+            
+            // Shuffle the choices
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+                if (i === correctAnswer) correctAnswer = j;
+                else if (j === correctAnswer) correctAnswer = i;
+            }
+
+            // Generate choice buttons
+            const choicesGrid = document.getElementById('choicesGrid');
+            choicesGrid.innerHTML = '';
+            
+            choices.forEach((choice, index) => {
+                const choiceDiv = document.createElement('div');
+                choiceDiv.className = 'choice-option';
+                choiceDiv.onclick = () => selectChoice(index);
+                
+                const label = document.createElement('div');
+                label.className = 'choice-label';
+                label.textContent = String.fromCharCode(65 + index); // A, B, C, D
+                
+                const shapeContainer = document.createElement('div');
+                shapeContainer.className = 'choice-shape';
+                
+                const shape3D = document.createElement('div');
+                shape3D.className = 'choice-3d';
+                shape3D.id = `choice-${index}`;
+                
+                shapeContainer.appendChild(shape3D);
+                choiceDiv.appendChild(label);
+                choiceDiv.appendChild(shapeContainer);
+                choicesGrid.appendChild(choiceDiv);
+                
+                // Create the 3D piece for this choice and set random static rotation
+                setTimeout(() => {
+                    createPiece(choice, `choice-${index}`, 'blue', 0.8);
+                    setRandomStaticRotation(shape3D);
+                }, 50);
+            });
+        }
+
+        function selectChoice(index) {
+            // Remove previous selection
+            document.querySelectorAll('.choice-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select new choice
+            document.querySelectorAll('.choice-option')[index].classList.add('selected');
+            selectedChoice = index;
+            document.getElementById('checkBtn').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (selectedChoice === null) return;
+            
+            totalQuestions++;
+            const choices = document.querySelectorAll('.choice-option');
+            
+            if (selectedChoice === correctAnswer) {
+                score++;
+                choices[selectedChoice].classList.add('correct');
+                document.getElementById('result').textContent = '✅ Excellent! You found the correct missing piece!';
+                document.getElementById('result').style.color = '#2ecc71';
+            } else {
+                choices[selectedChoice].classList.add('incorrect');
+                choices[correctAnswer].classList.add('correct');
+                document.getElementById('result').textContent = `❌ Not quite right. The correct answer is ${String.fromCharCode(65 + correctAnswer)}.`;
+                document.getElementById('result').style.color = '#e74c3c';
+            }
+            
+            // Disable all choices
+            choices.forEach(choice => {
+                choice.onclick = null;
+                choice.style.cursor = 'default';
+            });
+            
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            
+            updateScore();
+        }
+
+        function nextQuestion() {
+            generateQuestion();
+            document.getElementById('checkBtn').style.display = 'inline-block';
+        }
+
+        function newQuestion() {
+            generateQuestion();
+            document.getElementById('checkBtn').style.display = 'inline-block';
+        }
+
+        function updateScore() {
+            const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+            document.getElementById('score').textContent = `Score: ${score}/${totalQuestions} (${percentage}%)`;
+        }
+
+        // Initialize first question
+        generateQuestion();
+        updateScore();
+    </script>
+</body>
+</html>
