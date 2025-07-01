@@ -53,6 +53,7 @@
         .problem-section {
             margin-bottom: 40px;
             text-align: center;
+            min-height: 250px; /* Reserve space */
         }
 
         .given-pieces {
@@ -76,7 +77,6 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            /* Static transform will be set randomly by JavaScript */
         }
 
         .unit-cube {
@@ -93,55 +93,19 @@
             border: 1px solid rgba(0, 0, 0, 0.3);
         }
 
-        .blue-cube .cube-face.front { 
-            background: #3498db;
-            transform: translateZ(10px); 
-        }
-        .blue-cube .cube-face.back { 
-            background: #2980b9;
-            transform: rotateY(180deg) translateZ(10px); 
-        }
-        .blue-cube .cube-face.right { 
-            background: #5dade2;
-            transform: rotateY(90deg) translateZ(10px); 
-        }
-        .blue-cube .cube-face.left { 
-            background: #2471a3;
-            transform: rotateY(-90deg) translateZ(10px); 
-        }
-        .blue-cube .cube-face.top { 
-            background: #85c1e9;
-            transform: rotateX(90deg) translateZ(10px); 
-        }
-        .blue-cube .cube-face.bottom { 
-            background: #1b4f72;
-            transform: rotateX(-90deg) translateZ(10px); 
-        }
+        .blue-cube .cube-face.front { background: #3498db; transform: translateZ(10px); }
+        .blue-cube .cube-face.back { background: #2980b9; transform: rotateY(180deg) translateZ(10px); }
+        .blue-cube .cube-face.right { background: #5dade2; transform: rotateY(90deg) translateZ(10px); }
+        .blue-cube .cube-face.left { background: #2471a3; transform: rotateY(-90deg) translateZ(10px); }
+        .blue-cube .cube-face.top { background: #85c1e9; transform: rotateX(90deg) translateZ(10px); }
+        .blue-cube .cube-face.bottom { background: #1b4f72; transform: rotateX(-90deg) translateZ(10px); }
 
-        .gray-cube .cube-face.front { 
-            background: #7f8c8d;
-            transform: translateZ(10px); 
-        }
-        .gray-cube .cube-face.back { 
-            background: #5d6d6e;
-            transform: rotateY(180deg) translateZ(10px); 
-        }
-        .gray-cube .cube-face.right { 
-            background: #95a5a6;
-            transform: rotateY(90deg) translateZ(10px); 
-        }
-        .gray-cube .cube-face.left { 
-            background: #566573;
-            transform: rotateY(-90deg) translateZ(10px); 
-        }
-        .gray-cube .cube-face.top { 
-            background: #aab7b8;
-            transform: rotateX(90deg) translateZ(10px); 
-        }
-        .gray-cube .cube-face.bottom { 
-            background: #34495e;
-            transform: rotateX(-90deg) translateZ(10px); 
-        }
+        .gray-cube .cube-face.front { background: #7f8c8d; transform: translateZ(10px); }
+        .gray-cube .cube-face.back { background: #5d6d6e; transform: rotateY(180deg) translateZ(10px); }
+        .gray-cube .cube-face.right { background: #95a5a6; transform: rotateY(90deg) translateZ(10px); }
+        .gray-cube .cube-face.left { background: #566573; transform: rotateY(-90deg) translateZ(10px); }
+        .gray-cube .cube-face.top { background: #aab7b8; transform: rotateX(90deg) translateZ(10px); }
+        .gray-cube .cube-face.bottom { background: #34495e; transform: rotateX(-90deg) translateZ(10px); }
 
         .operator {
             font-size: 3rem;
@@ -188,6 +152,10 @@
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-5px);
+        }
+        .choice-option.disabled {
+             opacity: 0.7;
+             pointer-events: none;
         }
 
         .choice-option.selected {
@@ -239,26 +207,15 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            /* Static transform will be set randomly by JavaScript */
         }
-
-        .choice-3d .unit-cube {
-            width: 16px;
-            height: 16px;
-        }
-
-        .choice-3d .cube-face {
-            width: 16px;
-            height: 16px;
-        }
-
+        .choice-3d .unit-cube { width: 16px; height: 16px; }
+        .choice-3d .cube-face { width: 16px; height: 16px; }
         .choice-3d .blue-cube .cube-face.front { transform: translateZ(8px); }
         .choice-3d .blue-cube .cube-face.back { transform: rotateY(180deg) translateZ(8px); }
         .choice-3d .blue-cube .cube-face.right { transform: rotateY(90deg) translateZ(8px); }
         .choice-3d .blue-cube .cube-face.left { transform: rotateY(-90deg) translateZ(8px); }
         .choice-3d .blue-cube .cube-face.top { transform: rotateX(90deg) translateZ(8px); }
         .choice-3d .blue-cube .cube-face.bottom { transform: rotateX(-90deg) translateZ(8px); }
-
         .choice-3d .gray-cube .cube-face.front { transform: translateZ(8px); }
         .choice-3d .gray-cube .cube-face.back { transform: rotateY(180deg) translateZ(8px); }
         .choice-3d .gray-cube .cube-face.right { transform: rotateY(90deg) translateZ(8px); }
@@ -266,13 +223,99 @@
         .choice-3d .gray-cube .cube-face.top { transform: rotateX(90deg) translateZ(8px); }
         .choice-3d .gray-cube .cube-face.bottom { transform: rotateX(-90deg) translateZ(8px); }
 
+        .timer {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .timer.warning {
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+            animation: timerPulse 1s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .game-over-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .game-over h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .final-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .question-counter {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 600;
+        }
         .buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
         }
-
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             border: none;
@@ -285,57 +328,29 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
-
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
-
         .result {
             text-align: center;
             margin-top: 20px;
             font-size: 1.3rem;
             font-weight: 600;
-        }
-
-        .score {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.1rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 15px;
+            min-height: 2rem;
         }
 
         @media (max-width: 768px) {
-            .given-pieces {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .piece-container {
-                width: 160px;
-                height: 160px;
-            }
-            
-            .choices-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .choice-option {
-                height: 180px;
-            }
-            
-            .choice-shape {
-                width: 100px;
-                height: 100px;
-            }
+            .given-pieces { flex-direction: column; gap: 20px; }
+            .piece-container { width: 160px; height: 160px; }
+            .choices-grid { grid-template-columns: repeat(2, 1fr); }
+            .choice-option { height: 180px; }
+            .choice-shape { width: 100px; height: 100px; }
         }
     </style>
 </head>
@@ -346,53 +361,122 @@
     </div>
 
     <div class="test-container">
+        <div class="question-counter" id="questionCounter">Question 0 of 20</div>
+        <div class="timer" id="timer">Time: 10:00</div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="currentScore">0</div>
+                <div class="stat-label">Current Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="accuracy">0%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="highScore">0</div>
+                <div class="stat-label">High Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="gamesPlayed">0</div>
+                <div class="stat-label">Games Played</div>
+            </div>
+        </div>
         <div class="problem-section">
-            <h2 style="margin-bottom: 20px;">Given pieces:</h2>
+            <h2 style="margin-bottom: 20px; display: none;" id="givenPiecesTitle">Given pieces:</h2>
             <div class="given-pieces">
                 <div class="piece-container">
-                    <div class="piece-3d" id="piece1">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
+                    <div class="piece-3d" id="piece1"></div>
                 </div>
-                
-                <div class="operator">+</div>
-                
+                <div class="operator" id="operator1" style="display: none;">+</div>
                 <div class="piece-container">
-                    <div class="piece-3d" id="piece2">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
+                    <div class="piece-3d" id="piece2"></div>
                 </div>
-                
-                <div class="operator">+ ? = 3×3×3 Cube</div>
+                <div class="operator" id="operator2" style="display: none;">+ ? = 3×3×3 Cube</div>
             </div>
         </div>
 
         <div class="choices-section">
-            <div class="choices-title">Select the correct missing part:</div>
+            <div class="choices-title" id="choicesTitle" style="display: none;">Select the correct missing part:</div>
             <div class="choices-grid" id="choicesGrid">
-                <!-- Choices will be generated by JavaScript -->
-            </div>
+                </div>
         </div>
 
         <div class="buttons">
             <button class="btn" id="checkBtn" onclick="checkAnswer()" disabled>Check Answer</button>
             <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
-            <button class="btn" onclick="newQuestion()">New Question</button>
+            <button class="btn" onclick="startNewGame()">New Game</button>
         </div>
 
         <div class="result" id="result"></div>
-        <div class="score" id="score">Score: 0/0</div>
+    </div>
+
+    <div class="game-over" id="gameOverModal" style="display: none;">
+        <div class="game-over-content">
+            <h2 id="gameOverTitle">Game Complete!</h2>
+            <div class="final-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="finalScore">0</div>
+                    <div class="stat-label">Final Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="finalAccuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="finalTime">0:00</div>
+                    <div class="stat-label">Time Used</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="newRecord">-</div>
+                    <div class="stat-label">New Record</div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="startNewGame()">Play Again</button>
+            </div>
+        </div>
     </div>
 
     <script>
         let currentQuestion = 0;
         let score = 0;
-        let totalQuestions = 0;
+        const totalQuestions = 20;
         let selectedChoice = null;
         let correctAnswer = null;
         let currentPuzzle = null;
+        let gameTimer = null;
+        let timeLeft = 600; 
+        let gameStartTime = null;
+        let gameInProgress = false;
 
-        // Define the 3x3x3 cube as a complete set of coordinates
+        let stats = {
+            highScore: 0,
+            gamesPlayed: 0,
+            totalCorrect: 0,
+            totalQuestions: 0
+        };
+
+        // Mock localStorage for environments where it's not available
+        const mockStorage = new Map();
+        function getLocalStorage(key) {
+            return mockStorage.has(key) ? JSON.parse(mockStorage.get(key)) : null;
+        }
+        function setLocalStorage(key, value) {
+            mockStorage.set(key, JSON.stringify(value));
+        }
+
+        function loadStats() {
+            const savedStats = getLocalStorage('cubeAssemblyStats');
+            if (savedStats) {
+                stats = savedStats;
+            }
+        }
+
+        function saveStats() {
+            setLocalStorage('cubeAssemblyStats', stats);
+        }
+        
         const fullCube = [];
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
@@ -402,34 +486,18 @@
             }
         }
 
-        // Predefined puzzle configurations
         const puzzleConfigs = [
             {
-                piece1: [
-                    [0,0,0], [1,0,0], [2,0,0], [0,1,0], [1,1,0], [2,1,0],
-                    [0,0,1], [1,0,1], [0,1,1], [1,1,1]
-                ],
-                piece2: [
-                    [2,0,1], [0,2,0], [1,2,0], [2,2,0], [0,0,2], [1,0,2]
-                ]
+                piece1: [[0,0,0], [1,0,0], [2,0,0], [0,1,0], [1,1,0], [2,1,0], [0,0,1], [1,0,1], [0,1,1], [1,1,1]],
+                piece2: [[2,0,1], [0,2,0], [1,2,0], [2,2,0], [0,0,2], [1,0,2]]
             },
             {
-                piece1: [
-                    [0,0,0], [1,0,0], [0,1,0], [0,2,0], [1,1,0], [1,2,0],
-                    [0,0,1], [1,0,1], [0,1,1]
-                ],
-                piece2: [
-                    [2,0,0], [2,1,0], [2,2,0], [1,1,1], [2,0,1], [2,1,1]
-                ]
+                piece1: [[0,0,0], [1,0,0], [0,1,0], [0,2,0], [1,1,0], [1,2,0], [0,0,1], [1,0,1], [0,1,1]],
+                piece2: [[2,0,0], [2,1,0], [2,2,0], [1,1,1], [2,0,1], [2,1,1]]
             },
             {
-                piece1: [
-                    [0,0,0], [1,0,0], [2,0,0], [0,1,0], [0,2,0],
-                    [1,0,1], [2,0,1], [0,0,2]
-                ],
-                piece2: [
-                    [1,1,0], [2,1,0], [1,2,0], [2,2,0], [0,1,1], [1,1,1]
-                ]
+                piece1: [[0,0,0], [1,0,0], [2,0,0], [0,1,0], [0,2,0], [1,0,1], [2,0,1], [0,0,2]],
+                piece2: [[1,1,0], [2,1,0], [1,2,0], [2,2,0], [0,1,1], [1,1,1]]
             }
         ];
 
@@ -437,7 +505,6 @@
             const cube = document.createElement('div');
             cube.className = `unit-cube ${color}-cube`;
             
-            // Center the cube and apply scale
             const centerOffset = -1;
             cube.style.transform = `translate3d(${(x + centerOffset) * 20 * scale}px, ${(y + centerOffset) * 20 * scale}px, ${(z + centerOffset) * 20 * scale}px)`;
             
@@ -455,105 +522,200 @@
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             
+            const minX = Math.min(...coordinates.map(([x]) => x));
+            const maxX = Math.max(...coordinates.map(([x]) => x));
+            const minY = Math.min(...coordinates.map(([, y]) => y));
+            const maxY = Math.max(...coordinates.map(([, y]) => y));
+            const minZ = Math.min(...coordinates.map(([,, z]) => z));
+            const maxZ = Math.max(...coordinates.map(([,, z]) => z));
+            
+            const centerX = (minX + maxX) / 2;
+            const centerY = (minY + maxY) / 2;
+            const centerZ = (minZ + maxZ) / 2;
+            
             coordinates.forEach(([x, y, z]) => {
-                const cube = createUnitCube(x, y, z, color, scale);
+                const cube = createUnitCube(x - centerX, y - centerY, z - centerZ, color, scale);
                 container.appendChild(cube);
             });
         }
 
         function getMissingPiece(piece1, piece2) {
             const occupied = new Set();
+            [...piece1, ...piece2].forEach(([x, y, z]) => occupied.add(`${x},${y},${z}`));
             
-            // Add all coordinates from piece1 and piece2
-            [...piece1, ...piece2].forEach(([x, y, z]) => {
-                occupied.add(`${x},${y},${z}`);
-            });
-            
-            // Find missing coordinates
             const missing = [];
             fullCube.forEach(([x, y, z]) => {
                 if (!occupied.has(`${x},${y},${z}`)) {
                     missing.push([x, y, z]);
                 }
             });
-            
             return missing;
         }
 
         function generateRandomVariations(originalPiece, count) {
             const variations = [originalPiece];
-            
-            // Generate some random variations by moving/rotating pieces
             for (let i = 1; i < count; i++) {
                 const variation = [];
                 const baseSize = Math.max(3, Math.min(8, originalPiece.length + Math.floor(Math.random() * 4) - 2));
-                
-                // Create random piece of similar size
                 const usedCoords = new Set();
                 let attempts = 0;
-                
                 while (variation.length < baseSize && attempts < 50) {
                     const x = Math.floor(Math.random() * 3);
                     const y = Math.floor(Math.random() * 3);
                     const z = Math.floor(Math.random() * 3);
                     const coord = `${x},${y},${z}`;
-                    
                     if (!usedCoords.has(coord)) {
                         usedCoords.add(coord);
                         variation.push([x, y, z]);
                     }
                     attempts++;
                 }
-                
                 variations.push(variation);
             }
-            
             return variations;
         }
 
         function setRandomStaticRotation(element) {
-            // Generate random rotation angles for static display
-            const rotX = -60 + Math.random() * 120; // -60 to 60 degrees
-            const rotY = Math.random() * 360; // 0 to 360 degrees  
-            const rotZ = -45 + Math.random() * 90; // -45 to 45 degrees
-            
+            const rotX = -60 + Math.random() * 120;
+            const rotY = Math.random() * 360;
+            const rotZ = -45 + Math.random() * 90;
             element.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
         }
 
-        function generateQuestion() {
+        function updateTimer() {
+            if (!gameInProgress) return;
+            
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timerEl = document.getElementById('timer');
+            if (timeLeft <= 60 && !timerEl.classList.contains('warning')) {
+                timerEl.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                endGame("Time's Up!");
+                return;
+            }
+            
+            timeLeft--;
+        }
+
+        function startGameTimer() {
+            if (gameTimer) clearInterval(gameTimer);
+            gameInProgress = true;
+            gameStartTime = Date.now();
+            timeLeft = 600;
+            document.getElementById('timer').classList.remove('warning');
+            gameTimer = setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        function stopGameTimer() {
+            gameInProgress = false;
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+        }
+        
+        function updateStatsDisplay() {
+            const accuracy = stats.totalQuestions > 0 ? Math.round((stats.totalCorrect / stats.totalQuestions) * 100) : 0;
+            const sessionAccuracy = currentQuestion > 0 ? Math.round((score / currentQuestion) * 100) : 0;
+
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('accuracy').textContent = sessionAccuracy + '%';
+            document.getElementById('highScore').textContent = stats.highScore;
+            document.getElementById('gamesPlayed').textContent = stats.gamesPlayed;
+        }
+
+        function endGame(reason) {
+            stopGameTimer();
+            gameInProgress = false;
+            
+            const finalAccuracy = currentQuestion > 0 ? Math.round((score / currentQuestion) * 100) : 0;
+            const timeUsed = gameStartTime ? Math.floor((Date.now() - gameStartTime) / 1000) : 0;
+            const timeUsedString = `${Math.floor(timeUsed / 60)}:${(timeUsed % 60).toString().padStart(2, '0')}`;
+            
+            stats.totalCorrect += score;
+            stats.totalQuestions += currentQuestion;
+            
+            let newRecord = false;
+            if (score > stats.highScore) {
+                stats.highScore = score;
+                newRecord = true;
+            }
+            
+            saveStats();
+            updateStatsDisplay();
+            
+            document.getElementById('gameOverTitle').textContent = reason;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalAccuracy').textContent = finalAccuracy + '%';
+            document.getElementById('finalTime').textContent = timeUsedString;
+            document.getElementById('newRecord').textContent = newRecord ? 'YES!' : 'No';
+            document.getElementById('newRecord').style.color = newRecord ? '#4ecdc4' : '#fff';
+            
+            document.getElementById('gameOverModal').style.display = 'flex';
+        }
+
+        function startNewGame() {
+            document.getElementById('gameOverModal').style.display = 'none';
+
+            // Reset game state
+            currentQuestion = 0;
+            score = 0;
+            selectedChoice = null;
+            
             // Reset UI
+            document.getElementById('result').textContent = '';
+            document.getElementById('checkBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('givenPiecesTitle').style.display = 'block';
+            document.getElementById('choicesTitle').style.display = 'block';
+            document.getElementById('operator1').style.display = 'block';
+            document.getElementById('operator2').style.display = 'block';
+            
+            stats.gamesPlayed++;
+            updateStatsDisplay(); 
+            startGameTimer(); 
+            generateQuestion(); 
+        }
+
+        function generateQuestion() {
+            if (currentQuestion >= totalQuestions) {
+                endGame('All Questions Complete!');
+                return;
+            }
+            
+            currentQuestion++;
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+            
             document.getElementById('result').textContent = '';
             document.getElementById('checkBtn').disabled = true;
             document.getElementById('nextBtn').style.display = 'none';
             selectedChoice = null;
 
-            // Select a random puzzle configuration
             currentPuzzle = puzzleConfigs[Math.floor(Math.random() * puzzleConfigs.length)];
             
-            // Create the two given pieces with random orientations
             createPiece(currentPuzzle.piece1, 'piece1', 'blue');
             createPiece(currentPuzzle.piece2, 'piece2', 'gray');
-            
-            // Set random static rotations for the problem pieces
             setRandomStaticRotation(document.getElementById('piece1'));
             setRandomStaticRotation(document.getElementById('piece2'));
             
-            // Calculate the correct missing piece
             const correctMissingPiece = getMissingPiece(currentPuzzle.piece1, currentPuzzle.piece2);
             
-            // Generate choice variations
             const choices = generateRandomVariations(correctMissingPiece, 4);
-            correctAnswer = 0; // The correct answer is always the first one initially
+            correctAnswer = 0;
             
-            // Shuffle the choices
             for (let i = choices.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [choices[i], choices[j]] = [choices[j], choices[i]];
                 if (i === correctAnswer) correctAnswer = j;
                 else if (j === correctAnswer) correctAnswer = i;
+                [choices[i], choices[j]] = [choices[j], choices[i]];
             }
 
-            // Generate choice buttons
             const choicesGrid = document.getElementById('choicesGrid');
             choicesGrid.innerHTML = '';
             
@@ -578,7 +740,6 @@
                 choiceDiv.appendChild(shapeContainer);
                 choicesGrid.appendChild(choiceDiv);
                 
-                // Create the 3D piece for this choice and set random static rotation
                 setTimeout(() => {
                     createPiece(choice, `choice-${index}`, 'blue', 0.8);
                     setRandomStaticRotation(shape3D);
@@ -587,65 +748,56 @@
         }
 
         function selectChoice(index) {
-            // Remove previous selection
+            if (!gameInProgress) return;
             document.querySelectorAll('.choice-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            // Select new choice
             document.querySelectorAll('.choice-option')[index].classList.add('selected');
             selectedChoice = index;
             document.getElementById('checkBtn').disabled = false;
         }
 
         function checkAnswer() {
-            if (selectedChoice === null) return;
+            if (selectedChoice === null || !gameInProgress) return;
             
-            totalQuestions++;
             const choices = document.querySelectorAll('.choice-option');
             
             if (selectedChoice === correctAnswer) {
                 score++;
                 choices[selectedChoice].classList.add('correct');
-                document.getElementById('result').textContent = '✅ Excellent! You found the correct missing piece!';
+                document.getElementById('result').textContent = '✅ Excellent! Correct!';
                 document.getElementById('result').style.color = '#2ecc71';
             } else {
                 choices[selectedChoice].classList.add('incorrect');
                 choices[correctAnswer].classList.add('correct');
-                document.getElementById('result').textContent = `❌ Not quite right. The correct answer is ${String.fromCharCode(65 + correctAnswer)}.`;
+                document.getElementById('result').textContent = `❌ Not quite. The correct answer is ${String.fromCharCode(65 + correctAnswer)}.`;
                 document.getElementById('result').style.color = '#e74c3c';
             }
             
-            // Disable all choices
             choices.forEach(choice => {
                 choice.onclick = null;
                 choice.style.cursor = 'default';
+                choice.classList.add('disabled');
             });
             
             document.getElementById('checkBtn').style.display = 'none';
             document.getElementById('nextBtn').style.display = 'inline-block';
             
-            updateScore();
+            updateStatsDisplay();
         }
 
         function nextQuestion() {
-            generateQuestion();
             document.getElementById('checkBtn').style.display = 'inline-block';
-        }
-
-        function newQuestion() {
             generateQuestion();
-            document.getElementById('checkBtn').style.display = 'inline-block';
         }
 
-        function updateScore() {
-            const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-            document.getElementById('score').textContent = `Score: ${score}/${totalQuestions} (${percentage}%)`;
-        }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            updateStatsDisplay();
+        });
 
-        // Initialize first question
-        generateQuestion();
-        updateScore();
     </script>
 </body>
 </html>
